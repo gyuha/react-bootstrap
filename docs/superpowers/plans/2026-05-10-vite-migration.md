@@ -203,6 +203,8 @@ Expected: `node_modules/` 와 `pnpm-lock.yaml` 생성, 에러 0.
 
 - [ ] **Step 2: tsconfig.node.json 작성**
 
+`composite: true` 가 있는 referenced 프로젝트는 `noEmit: true` 와 호환되지 않는다 (TS6310). 대신 emit 산출물을 `node_modules/.tmp/` 로 redirect 해 repo 루트 오염을 막는다.
+
 ```json
 {
   "compilerOptions": {
@@ -211,11 +213,12 @@ Expected: `node_modules/` 와 `pnpm-lock.yaml` 생성, 에러 0.
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "skipLibCheck": true,
-    "noEmit": true,
     "composite": true,
     "strict": true,
     "isolatedModules": true,
-    "allowSyntheticDefaultImports": true
+    "allowSyntheticDefaultImports": true,
+    "outDir": "./node_modules/.tmp/tsc-node",
+    "tsBuildInfoFile": "./node_modules/.tmp/tsc-node/tsconfig.node.tsbuildinfo"
   },
   "include": ["vite.config.ts"]
 }
@@ -227,12 +230,12 @@ Expected: `node_modules/` 와 `pnpm-lock.yaml` 생성, 에러 0.
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
 import tailwindcss from '@tailwindcss/vite';
-import { TanStackRouterVite } from '@tanstack/router-plugin/vite';
+import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 
 export default defineConfig({
   plugins: [
-    TanStackRouterVite({
+    tanstackRouter({
       target: 'react',
       routesDirectory: 'src/routes',
       generatedRouteTree: 'src/routeTree.gen.ts',
