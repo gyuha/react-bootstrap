@@ -654,6 +654,14 @@ Expected:
   ```
   (이 fallback 발생 여부는 STDOUT 에서 "style not found" 여부로 판정. 발생 시 commit 메시지에 명시.)
 
+**알려진 부작용 (수용)**:
+- `base-nova` 의 `form` 레지스트리는 stub 이므로 form 만 `new-york-v4` 에서 가져온다 (`pnpm dlx shadcn@latest add https://ui.shadcn.com/r/styles/new-york-v4/form.json`). form.tsx 는 `radix-ui` 통합 패키지 사용.
+- shadcn CLI 가 `react-day-picker` 를 v10 으로 강제 bump 한다 (base-nova `calendar.tsx` 가 v10 슬롯 키 사용). 이를 받아들이고 plan 의 ^9.14.0 핀은 ^10.0.0 으로 갱신.
+- `calendar.tsx` 의 `table:` ClassName 키를 v10 의 `month_grid:` 로 패치 필요 (없으면 typecheck 실패).
+- `scroll-area.tsx` 의 `import * as React from "react"` 가 unused 로 strict-TS 에 걸림 → 제거.
+- `package.json` 에 `radix-ui ^1.4.3` 가 추가됨 (form.tsx 가 사용). 이전의 개별 `@radix-ui/react-label`, `@radix-ui/react-slot` 는 미사용 잉여로 남지만 Step 단위 깔끔함을 위해 그대로 둔다 (제거하려면 Step 6 마무리에서).
+- shadcn upstream `form.tsx` 의 `useFormField` 가드가 dereference **이후** 에 위치한 버그를 우리 코드에서 즉시 패치한다 (`fieldContext.name` 검사를 hook 호출 전으로 hoist).
+
 - [ ] **Step 4: shadcn sonner 컴포넌트가 next-themes 를 import 하는지 확인 후 패치**
 
 ```bash
