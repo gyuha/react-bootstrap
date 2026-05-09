@@ -25,8 +25,7 @@ export function useSignupMutation() {
     mutationFn: (data: SignupInput) => mockSignup(data),
     onSuccess: () => {
       toast.success('가입이 완료되었습니다!');
-      // Step 5에서 /auth/login 라우트가 추가될 때까지 placeholder 라우트 트리에서는 미등록 경로
-      navigate({ to: '/auth/login' as '/' });
+      navigate({ to: '/auth/login' });
     },
   });
 }
