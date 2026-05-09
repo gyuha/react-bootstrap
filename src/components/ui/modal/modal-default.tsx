@@ -7,13 +7,17 @@ import useModal from '@/stores/modal-store';
 import type React from 'react';
 
 const InfoContainer = ({ children }: { children: React.ReactNode }) => (
-  <pre className={cn('my-6 justify-center gap-2.5 rounded-sm bg-zinc-100 px-4 py-3')}>{children}</pre>
+  <pre className={cn('my-6 justify-center gap-2.5 rounded-sm bg-zinc-100 px-4 py-3')}>
+    {children}
+  </pre>
 );
 const ContentContainer = ({ children }: { children: React.ReactNode }) => (
   <div className={cn('justify-center gap-2.5 text-base')}>{children}</div>
 );
 const AlertContainer = ({ children }: { children: React.ReactNode }) => (
-  <div className={cn('my-6 w-full justify-center gap-2.5 px-4 py-3 text-center text-base')}>{children}</div>
+  <div className={cn('my-6 w-full justify-center gap-2.5 px-4 py-3 text-center text-base')}>
+    {children}
+  </div>
 );
 
 type DefaultModalProps = {
@@ -22,7 +26,11 @@ type DefaultModalProps = {
   zIndex?: number;
 } & (ModalAlertProps | ContentModalProps);
 
-const ModalDefault = ({ className, size = 'md', ...rest }: DefaultModalProps): React.JSX.Element | null => {
+const ModalDefault = ({
+  className,
+  size = 'md',
+  ...rest
+}: DefaultModalProps): React.JSX.Element | null => {
   const { closeModal } = useModal();
   const isMobile = useMobile();
 
@@ -32,7 +40,8 @@ const ModalDefault = ({ className, size = 'md', ...rest }: DefaultModalProps): R
   const handleOk = 'handleOk' in rest ? rest.handleOk : undefined;
   const hideBottomButton = 'hideBottomButton' in rest ? rest.hideBottomButton : undefined;
   const handleCancel = 'handleCancel' in rest ? rest.handleCancel : undefined;
-  const hideBottomCancelButton = 'hideBottomCancelButton' in rest ? rest.hideBottomCancelButton : undefined;
+  const hideBottomCancelButton =
+    'hideBottomCancelButton' in rest ? rest.hideBottomCancelButton : undefined;
   const txtCancel = 'txtCancel' in rest ? rest.txtCancel : undefined;
 
   return (
@@ -57,20 +66,20 @@ const ModalDefault = ({ className, size = 'md', ...rest }: DefaultModalProps): R
       </Modal.Content>
       {!hideBottomButton && (
         <Modal.Footer>
-          {handleCancel !== undefined
-            ? !hideBottomCancelButton ? (
-                <Button
-                  variant={'secondary'}
-                  size={'lg'}
-                  className="min-w-0 border-[1.5px] border-neutral-900"
-                  onClick={() => {
-                    handleCancel();
-                  }}
-                >
-                  취소
-                </Button>
-              ) : null
-            : null}
+          {handleCancel !== undefined ? (
+            !hideBottomCancelButton ? (
+              <Button
+                variant={'secondary'}
+                size={'lg'}
+                className="min-w-0 border-[1.5px] border-neutral-900"
+                onClick={() => {
+                  handleCancel();
+                }}
+              >
+                취소
+              </Button>
+            ) : null
+          ) : null}
           {txtCancel && !handleCancel && (
             <Button
               variant={'secondary'}

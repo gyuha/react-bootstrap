@@ -1,10 +1,10 @@
-import { createFileRoute } from '@tanstack/react-router';
-import { Plus } from 'lucide-react';
-import { useRef } from 'react';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { cn } from '@/lib/utils';
 import useModal from '@/stores/modal-store';
+import { createFileRoute } from '@tanstack/react-router';
+import { Plus } from 'lucide-react';
+import { useRef } from 'react';
 
 export const Route = createFileRoute('/test/modal')({
   component: ModalTestPage,
@@ -126,6 +126,7 @@ function ModalTestPage() {
               ),
               size: 'sm',
               hideBottomButton: true,
+              // biome-ignore lint/suspicious/noExplicitAny: CustomModalProps does not include ModalHandleProps; legacy escape hatch from temp/
             } as any);
           }}
         >
@@ -137,7 +138,14 @@ function ModalTestPage() {
         <h2 className="text-lg font-semibold">사이즈별 모달</h2>
         <div className="flex flex-wrap gap-2">
           {(['sm', 'md', 'lg', 'xl'] as const).map((size) => (
-            <Button key={size} variant="outline" size="sm" onClick={() => openModal({ alert: `${size} 사이즈 모달`, size, title: `Size: ${size}` })}>
+            <Button
+              key={size}
+              variant="outline"
+              size="sm"
+              onClick={() =>
+                openModal({ alert: `${size} 사이즈 모달`, size, title: `Size: ${size}` })
+              }
+            >
               {size}
             </Button>
           ))}
@@ -214,7 +222,7 @@ function ModalTestPage() {
                   hideBottomButton: true,
                 },
                 false,
-                { portal: true, portalTarget: portalTargetRef },
+                { portal: true, portalTarget: portalTargetRef }
               );
             }}
           >
@@ -226,11 +234,7 @@ function ModalTestPage() {
       </section>
 
       <div className="pt-4">
-        <Button
-          variant="secondary"
-          onClick={closeAllModal}
-          className="w-full"
-        >
+        <Button variant="secondary" onClick={closeAllModal} className="w-full">
           모든 모달 닫기
         </Button>
       </div>

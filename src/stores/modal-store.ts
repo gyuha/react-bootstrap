@@ -13,7 +13,7 @@ export interface IModalStore extends IModalState {
   openModal: (
     modalProp: ModalProps | string | JSX.Element,
     hideBottomButton?: boolean,
-    options?: { portal?: boolean; portalTarget?: React.RefObject<HTMLElement | null> },
+    options?: { portal?: boolean; portalTarget?: React.RefObject<HTMLElement | null> }
   ) => void;
   closeModal: () => void;
   closeAllModal: () => void;
@@ -34,7 +34,7 @@ const useModal = create<IModalStore>()(
       openModal: (
         props: ModalProps | string | JSX.Element,
         hideBottomButton = false,
-        options?: { portal?: boolean; portalTarget?: React.RefObject<HTMLElement | null> },
+        options?: { portal?: boolean; portalTarget?: React.RefObject<HTMLElement | null> }
       ) => {
         if (typeof props === 'string' || React.isValidElement(props)) {
           get().openModal({
@@ -50,7 +50,9 @@ const useModal = create<IModalStore>()(
         }
 
         const portalOptions =
-          options?.portal && options?.portalTarget ? { portal: true, portalTarget: options.portalTarget } : {};
+          options?.portal && options?.portalTarget
+            ? { portal: true, portalTarget: options.portalTarget }
+            : {};
 
         const modalProps: ModalProps = {
           ...(props as ModalProps),
@@ -74,8 +76,8 @@ const useModal = create<IModalStore>()(
     }),
     {
       enabled: true,
-    },
-  ),
+    }
+  )
 );
 
 export default useModal;
