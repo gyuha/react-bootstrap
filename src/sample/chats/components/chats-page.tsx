@@ -20,7 +20,7 @@ import {
   SendHorizontal,
   Smile,
 } from 'lucide-react';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 const channelLabelKeys: Record<SampleChatConversation['channel'], string> = {
@@ -53,17 +53,18 @@ const timeFormatter = new Intl.DateTimeFormat('en', {
 export function ChatsPage() {
   const { t } = useTranslation('sample');
   const [query, setQuery] = useState('');
-  const [selectedConversationId, setSelectedConversationId] = useState(chats[0]?.id ?? '');
+  const [conversations, setConversations] = useState<SampleChatConversation[]>(() => chats);
+  const [selectedConversationId, setSelectedConversationId] = useState(conversations[0]?.id ?? '');
   const [draftMessage, setDraftMessage] = useState('');
 
   const filteredChats = useMemo(() => {
     const normalizedQuery = query.trim().toLowerCase();
 
     if (normalizedQuery.length === 0) {
-      return chats;
+      return conversations;
     }
 
-    return chats.filter((conversation) => {
+    return conversations.filter((conversation) => {
       const searchableText = [
         conversation.participant.name,
         conversation.participant.email,
@@ -76,19 +77,49 @@ export function ChatsPage() {
 
       return searchableText.includes(normalizedQuery);
     });
-  }, [query, t]);
+  }, [conversations, query, t]);
 
   const selectedConversation = useMemo(
     () =>
-      chats.find((conversation) => conversation.id === selectedConversationId) ??
+      conversations.find((conversation) => conversation.id === selectedConversationId) ??
       filteredChats[0] ??
-      chats[0],
-    [filteredChats, selectedConversationId]
+      conversations[0],
+    [conversations, filteredChats, selectedConversationId]
   );
+
+  const handleSendMessage = () => {
+    const body = draftMessage.trim();
+    if (body.length === 0 || !selectedConversation) {
+      return;
+    }
+
+    const targetId = selectedConversation.id;
+    const newMessage: SampleChatMessage = {
+      id: `${targetId}-message-${Date.now()}`,
+      conversationId: targetId,
+      authorId: 'sample-admin',
+      body,
+      createdAt: new Date().toISOString(),
+      read: true,
+    };
+
+    setConversations((prev) =>
+      prev.map((conversation) =>
+        conversation.id === targetId
+          ? { ...conversation, messages: [...conversation.messages, newMessage] }
+          : conversation
+      )
+    );
+    setDraftMessage('');
+  };
 
   return (
     <main className="flex flex-1 flex-col gap-6 p-6 md:p-8">
-      <ChatsHeader conversationCount={chats.length} unreadCount={getUnreadCount(chats)} t={t} />
+      <ChatsHeader
+        conversationCount={conversations.length}
+        unreadCount={getUnreadCount(conversations)}
+        t={t}
+      />
 
       <section className="grid min-h-[680px] gap-4 xl:grid-cols-[360px_minmax(0,1fr)]">
         <Card className="overflow-hidden p-0">
@@ -134,7 +165,7 @@ export function ChatsPage() {
             <MessageComposer
               value={draftMessage}
               onChange={setDraftMessage}
-              onSubmit={() => setDraftMessage('')}
+              onSubmit={handleSendMessage}
               t={t}
             />
           </div>
@@ -267,8 +298,17 @@ function ConversationHeader({
 }
 
 function MessageList({ conversation }: { conversation: SampleChatConversation }) {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    const node = scrollRef.current;
+    if (node) {
+      node.scrollTop = node.scrollHeight;
+    }
+  }, [conversation.id, conversation.messages.length]);
+
   return (
-    <div className="flex-1 space-y-4 overflow-y-auto bg-muted/20 p-4">
+    <div ref={scrollRef} className="flex-1 space-y-4 overflow-y-auto bg-muted/20 p-4">
       {conversation.messages.map((message) => (
         <ChatBubble key={message.id} message={message} conversation={conversation} />
       ))}
