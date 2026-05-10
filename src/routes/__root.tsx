@@ -2,7 +2,8 @@ import { ThemeToggle } from '@/components/theme-toggle';
 import Modals from '@/components/ui/modal/modal-manager';
 import { Toaster } from '@/components/ui/sonner';
 import { AppProviders } from '@/providers/app-providers';
-import { Outlet, createRootRoute } from '@tanstack/react-router';
+import { isSamplePath } from '@/sample/layout/navigation';
+import { Outlet, createRootRoute, useRouterState } from '@tanstack/react-router';
 import { TanStackRouterDevtools } from '@tanstack/react-router-devtools';
 
 export const Route = createRootRoute({
@@ -10,9 +11,11 @@ export const Route = createRootRoute({
 });
 
 function RootComponent() {
+  const pathname = useRouterState({ select: (state) => state.location.pathname });
+
   return (
     <AppProviders>
-      <ThemeToggle className="fixed top-4 right-4 z-50" />
+      {isSamplePath(pathname) ? null : <ThemeToggle className="fixed top-4 right-4 z-50" />}
       <Outlet />
       <Modals />
       <Toaster />
