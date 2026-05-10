@@ -7,7 +7,11 @@ import useModal from '@/stores/modal-store';
 import type React from 'react';
 
 const InfoContainer = ({ children }: { children: React.ReactNode }) => (
-  <pre className={cn('my-6 justify-center gap-2.5 rounded-sm bg-zinc-100 px-4 py-3')}>
+  <pre
+    className={cn(
+      'my-6 justify-center gap-2.5 rounded-sm bg-muted px-4 py-3 text-muted-foreground'
+    )}
+  >
     {children}
   </pre>
 );
@@ -45,7 +49,7 @@ const ModalDefault = ({
   const txtCancel = 'txtCancel' in rest ? rest.txtCancel : undefined;
 
   return (
-    <Modal.Container size={size} className={isMobile ? 'justify-center gap-4 bg-white' : ''}>
+    <Modal.Container size={size} className={isMobile ? 'justify-center gap-4' : ''}>
       <Modal.Header hideCloseButton={hideCloseButton} handleClose={handleClose}>
         {title}
       </Modal.Header>
@@ -71,7 +75,7 @@ const ModalDefault = ({
               <Button
                 variant={'secondary'}
                 size={'lg'}
-                className="min-w-0 border-[1.5px] border-neutral-900"
+                className="min-w-0 border-[1.5px] border-foreground"
                 onClick={() => {
                   handleCancel();
                 }}

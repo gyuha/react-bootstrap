@@ -49,11 +49,11 @@ const ModalContainer = ({
     <motion.div
       tabIndex={-1}
       className={cn(
-        'relative inset-0 rounded-xl z-60',
-        'gap-6 rounded-xl border shadow-sm m-1',
+        'relative inset-0 z-60 m-1',
         'flex max-h-full max-w-full flex-col scroll-auto',
+        'gap-6 rounded-xl border bg-popover text-popover-foreground shadow-sm',
         isMobile ? 'h-full !w-full px-6' : 'p-6',
-        className || 'gap-6 bg-white shadow'
+        className
       )}
       style={{ width: MODAL_SIZE[size || 'md'], zIndex: zIndex }}
       variants={effect}
