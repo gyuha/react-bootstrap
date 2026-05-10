@@ -1,3 +1,4 @@
+import { FormDevtool } from '@/components/dev/form-devtool';
 import { Alert, AlertDescription } from '@/components/ui/alert';
 import { Button } from '@/components/ui/button';
 import {
@@ -107,6 +108,7 @@ export function SignupForm() {
           </Button>
         </form>
       </Form>
+      <FormDevtool control={form.control} />
     </motion.div>
   );
 }

@@ -41,6 +41,7 @@
   },
   "devDependencies": {
     "@biomejs/biome": "^1.9.4",
+    "@hookform/devtools": "^4.4.0",
     "@tailwindcss/vite": "^4.0.0",
     "@tanstack/react-router-devtools": "^1.166.13",
     "@tanstack/router-plugin": "^1.95.0",
