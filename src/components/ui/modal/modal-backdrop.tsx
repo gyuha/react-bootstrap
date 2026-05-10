@@ -37,8 +37,10 @@ const ModalBackdrop = ({
   return (
     <motion.div
       className={cn(
-        'fixed inset-0 flex items-center justify-center backdrop-blur-sm',
-        'bg-neutral-950 bg-opacity-60',
+        'fixed inset-0 flex items-center justify-center',
+        // frosted glass: heavy blur + slight color saturation; full-opacity fallback when backdrop-filter unsupported
+        'bg-black/50 supports-[backdrop-filter]:bg-black/30',
+        'backdrop-blur-md backdrop-saturate-150',
         className
       )}
       style={{ zIndex }}
