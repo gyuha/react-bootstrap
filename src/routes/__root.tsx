@@ -1,3 +1,4 @@
+import { ThemeToggle } from '@/components/theme-toggle';
 import Modals from '@/components/ui/modal/modal-manager';
 import { Toaster } from '@/components/ui/sonner';
 import { AppProviders } from '@/providers/app-providers';
@@ -11,6 +12,7 @@ export const Route = createRootRoute({
 function RootComponent() {
   return (
     <AppProviders>
+      <ThemeToggle className="fixed top-4 right-4 z-50" />
       <Outlet />
       <Modals />
       <Toaster />
